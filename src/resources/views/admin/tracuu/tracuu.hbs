@@ -1,0 +1,185 @@
+<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+{{> headerAdmin}}
+{{> sidebar}}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Tra cứu giấy chứng nhận</h1><br>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            data-bs-whatever="@mdo">Thêm Mới</button>
+            <a href="/admin/tra-cuu-giay-chung-nhan/create-pdf">Tạo file PDF</a>
+            
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <table class="table table-bordered " style="text-align: center;">
+
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Mã đăng ký</th>
+                    <th scope="col">File</th>
+                    <th scope="col">Công ty</th>
+                    <th scope="col">Người đại diện</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">SĐT</th>
+                    <th scope="col">Ngày bắt đầu</th>
+                    <th scope="col">Ngày kết thúc</th>
+                    <th scope="col">Ngày gia hạn</th>
+                    <th scope="col">Trạng thái</th>
+                    <th colspan="2">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tracuu}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.madangky}}</td>
+                    <td></a><button type="button" class="btn btn-success"><a href="/admin/tra-cuu-giay-chung-nhan/{{this._id}}/detail"
+                                style="color: aliceblue;">Xem chi
+                                tiết</a></td>
+                    <td>{{this.congty}}</td>
+                    <td>{{this.nguoidaidien}}</td>
+                    <td>{{this.diachi}}</td>
+                    <td>{{this.sdt}}</td>
+                    <td>{{this.ngaybatdau}}</td>
+                    <td>{{this.ngayketthuc}}</td>
+                    <td>{{this.ngaygiahan}}</td>
+                    <td>{{this.trangthai}}</td>
+                    <td> <a href="/admin/tra-cuu-giay-chung-nhan/{{this._id}}/edit"><i class="bi bi-pencil"
+                                style="color: rgb(7, 255, 56);"></i></a></td>
+                    <td> <a> <i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delete-work-modal"
+                                data-id="{{this._id}}" style="color: red;"></i></a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </section>
+    <div class="center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {{#if pagination.prev}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/tra-cuu-giay-chung-nhan?page={{pagination.prev}}"
+                        aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {{/if}}
+
+                {{#each pagination.pages}}
+                <li class="page-item {{#if this.active}}active{{/if}}">
+                    <a class="page-link" href="/admin/tra-cuu-giay-chung-nhan?page={{this.number}}">{{this.number}}</a>
+                </li>
+                {{/each}}
+
+                {{#if pagination.next}}
+                <li class="page-item">
+                    <a class="page-link" href="/admin/tra-cuu-giay-chung-nhan?page={{pagination.next}}"
+                        aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
+</main>
+{{> footerAdmin}}
+
+{{!-- modal thêm --}}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm tin tức</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/tra-cuu-giay-chung-nhan/creat" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Mã giấy chứng nhận:</label>
+                        <input type="text" class="form-control" id="madangky" name="madangky">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Chọn file pdf:</label>
+                        <input type="file" id="filepdf" class="form-control-file border" name="filepdf">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Tên công ty:</label>
+                        <input type="text" class="form-control" id="congty" name="congty">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Người đại diện:</label>
+                        <input type="text" class="form-control" id="nguoidaidien" name="nguoidaidien">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Địa chỉ:</label>
+                        <input type="text" class="form-control" id="diachi" name="diachi">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Số điện thoại:</label>
+                        <input type="number" class="form-control" id="sdt" name="sdt">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ngày bắt đầu:</label>
+                        <input type="date" class="form-control" id="ngaybatdau" name="ngaybatdau">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Ngày kết thúc:</label>
+                        <input type="date" class="form-control" id="ngayketthuc" name="ngayketthuc">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit">Thêm mới</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- modal xóa --}}
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa giấy chứng nhận</h5>
+                {{!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                --}}
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa giấy chứng nhận này không ?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-delete" type="button" class="btn btn-danger">Đồng ý xóa</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- form delete --}}
+<form name="delete-form" method="POST"></form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+
+
+    // delete 
+    const exampleModal = document.getElementById('delete-work-modal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        var deleteForm = document.forms['delete-form']
+        var btnDelete = document.getElementById('btn-delete')
+        const button = event.relatedTarget
+        //get id from button delete
+        const recipient = button.getAttribute('data-id')
+        btnDelete.onclick = function () {
+            deleteForm.action = '/admin/tra-cuu-giay-chung-nhan/' + recipient + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+</script>

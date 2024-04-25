@@ -1,0 +1,73 @@
+{{> header}}
+<div class="container-fluid bg-primary py-5 bg-header-detail" style="margin-bottom: 20px;">
+    <div class="row py-5">
+        <div class="col-12 pt-lg-5 mt-lg-5 text-center">
+            <h1 class="display-4 text-white animated zoomIn">Tra cứu giấy chứng nhận</h1>
+            <a href="/" class="h5 text-white">Trang chủ</a>
+            <i class="far fa-circle text-white px-2"></i>
+            <a  class="h5 text-white">Tra cứu giẩy chứng nhận</a>
+        </div>
+    </div>
+</div>
+<div class="featured-product" style="background-color: rgb(255, 255, 255)">
+    <div class="container">
+
+        <div class="section-main ">
+            <form action="/tra-cuu-giay-chung-nhan/search" method="POST">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="recipient-name" class="col-form-label"><strong>Nhập mã Chứng
+                                Nhận</strong></label>
+                        <input type="text" name="madangky" class="form-control" id="madangky"
+                            placeholder="Nhập mã tra cứu ...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="recipient-name" class="col-form-label"><strong>Ngày bắt đầu:</strong></label>
+                        <input type="date" class="form-control" id="ngaybatdau" name="ngaybatdau">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="recipient-name" class="col-form-label"><strong>Ngày kết thúc</strong></label>
+                        <input type="date" class="form-control" id="ngayketthuc" name="ngayketthuc">
+                    </div>
+                </div>
+                <br>
+                <div class=" d-flex justify-content-center align-items-center"><button type="submit"
+                        class="btn btn-primary center">Tìm Kiếm</button></div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="recent-product" style="background-color: rgb(255, 255, 255)">
+    <div class="container">
+        {{#if tracuu}}
+        <div class="row " style="background-color: rgb(250, 255, 249);">
+            <div class="col-md-6" style="padding-top: 5%;">
+                <p><strong>Công ty: </strong>{{tracuu.congty}}</p><br>
+                <p><strong>Địa chỉ:</strong> {{tracuu.diachi}}</p><br>
+                <p><strong>Số điện thoại:</strong> {{tracuu.sdt}}</p><br>
+                <p><strong>Người đại diện:</strong> {{tracuu.nguoidaidien}}</p><br>
+                <p><strong>Trạng thái:</strong> {{tracuu.trangthai}}</p><br>
+            </div>
+            <div class="col-md-6 center">
+                <embed src="/{{tracuu.filepdf}}" width="400px" height="500px" />
+            </div>
+        </div>
+        {{/if}}
+        {{#unless tracuu}}
+        <div class="row ">
+            <div class="col-6 ">
+                <br>
+                <br>
+                <h4><strong>Không tìm thấy!</strong></h4>
+                <p>Chúng tôi không tìm thấy chứng chỉ phù hợp với yêu cầu của bạn. Vui lòng nhập từ khóa khác.</p>
+            </div>
+            <div class="col-6 center"><img src="/img/not-found.png" style="max-height: 200px;float:right"></div>
+        </div>
+        {{/unless}}
+
+    </div>
+</div>
+</div>
+
+{{> footer}}

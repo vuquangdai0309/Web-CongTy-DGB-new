@@ -1,0 +1,116 @@
+<!-- Spinner Start -->
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner"></div>
+</div>
+<!-- Spinner End -->
+
+
+<!-- Topbar Start -->
+<div class="container-fluid bg-dark px-5 d-none d-lg-block">
+    <div class="row gx-0">
+        <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+                <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>Số 35, ngách 93/15, phố Yên Sở,
+                    quận Hoàng Mai, thành phố Hà Nội</small>
+                <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>0839 882 883</small>
+                <small class="text-light"><i class="fa fa-envelope-open me-2"></i>chungnhan@dgb.com.vn</small>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center text-lg-end">
+            <div class="d-inline-flex align-items-center" style="height: 45px;">
+
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2"
+                    href="https://www.facebook.com/profile.php?id=61553630733498&mibextid=JRoKGi"><i
+                        class="fab fa-facebook-f fw-normal"></i></a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Topbar End -->
+
+<!-- Full Screen Search Start -->
+<div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content" style="background: rgba(9, 30, 62, .7);">
+            <div class="modal-header border-0">
+                <button type="button" class="btn bg-white btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="">
+                <form id="paginationForm" action="/tim-kiem" method="get">
+                    <div class="modal-body d-flex align-items-center justify-content-center ">
+                        <div class="input-group" style="max-width: 600px;">
+
+                            <input type="text" class="form-control bg-transparent border-primary p-3"
+                                placeholder="Nhập từ khóa  " name="search">
+                            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-search"></i></button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Full Screen Search End -->
+<!-- Navbar & Carousel Start -->
+<div class="container-fluid position-relative p-0">
+    <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+        <a href="/" class="navbar-brand p-0">
+            <img src="/img/logo1.png" style="width: 100px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-0">
+                <a href="/" class="nav-item nav-link ">Trang chủ</a>
+
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Giới thiệu</a>
+                    <div class="dropdown-menu m-0">
+                        {{#each gioithieu}}
+                        <a href="/bai-viet/{{this.slug}}" class="dropdown-item">{{this.title}}</a>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch vụ</a>
+                    <div class="dropdown-menu m-0">
+                        {{#each showmenu}}
+                        <a href="/bai-viet/{{this.slug}}" class="dropdown-item">{{this.title}}</a>
+                        {{/each}}
+                    </div>
+                </div>
+                <a href="/tin-tuc" class="nav-item nav-link">Tin tức</a>
+                <a href="/tra-cuu-giay-chung-nhan" class="nav-item nav-link">Tra cứu giấy chứng nhận</a>
+                <a href="/lien-he" class="nav-item nav-link">Liên hệ</a>
+            </div>
+            <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i
+                    class="fa fa-search"></i></butaton>
+
+        </div>
+    </nav>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Lấy đường dẫn hiện tại
+        var currentLocation = window.location.pathname;
+
+        // Lặp qua từng thẻ a và kiểm tra đường dẫn hiện tại có trùng với href của thẻ a không
+        $('a.nav-link').each(function () {
+            var linkHref = $(this).attr('href');
+            if (currentLocation === linkHref) {
+                $(this).addClass('active');
+                // Nếu đường dẫn hiện tại trùng với href của thẻ a, thêm lớp active
+                $(this).closest('.nav-item').addClass('active');
+                
+            }
+        });
+    });
+</script>
+<!-- Navbar & Carousel End -->

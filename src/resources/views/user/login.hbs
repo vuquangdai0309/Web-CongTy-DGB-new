@@ -1,0 +1,109 @@
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner"></div>
+</div>
+
+<main class="color-background">
+    <div class="container" style="z-index: 1000;">
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                        <div class="d-flex justify-content-center py-4">
+                            <a href="/" class="logo d-flex align-items-center w-auto">
+                                <img src="assets/img/logo.png" alt="">
+                                <span class="d-none d-lg-block">Công ty DGB</span>
+                            </a>
+                        </div><!-- End Logo -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="pt-4 pb-2">
+                                    <h5 class="card-title text-center pb-0 fs-4">Đăng nhập tài khoản của bạn</h5>
+                                    <p class="text-center small">Nhập tên đăng nhập và mật khẩu</p>
+                                </div>
+                                <form class="row g-3 " novalidate>
+                                    <div class="col-md-12">
+                                        <label for="username" class="form-label">Tên đăng nhập:</label>
+                                        <input type="text" class="form-control" id="name" name="username" required>
+                                        <div class="invalid-feedback">
+                                            Bạn cần nhập tên đăng nhập
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="password" class="form-label">Mật khẩu:</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            required>
+
+                                        <div class="invalid-feedback">
+                                            Bạn cần nhập mật khẩu
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 box-center mt-5">
+                                        <p class="small mb-0"> <a href="/user/forgot"> Quên mật khẩu ?</a></p>
+                                    </div>
+                                </form>
+                                <div class="col-12 box-center mt-4">
+                                    <button class="btn btn-primary w-50" type="submit" onclick="login()">Đăng
+                                        Nhập</button>
+                                </div>
+                                <br>
+                                <div class="col-12 box-center ">
+                                    <p id="message-error"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script>
+    var error = document.getElementById('message-error')
+
+    function login() {
+        $.ajax({
+            url: '/user/login',
+            type: 'POST',
+            data: {
+                username: $('#name').val(),
+                //mã hóa mật khẩu trước khi gửi qua ajax
+                password: CryptoJS.SHA256($('#password').val()).toString()
+            }
+        })
+            .then(data => {
+                if (data.message_error) {
+                    error.innerText = data.message_error
+                }
+                else {
+                    setCookie('token', data.token, 1)
+                    var dataUser = data.getUser.username
+                    localStorage.setItem('User', JSON.stringify(dataUser))
+                    window.location.replace('/admin')
+                }
+
+            })
+            .catch(err => {
+                console.log(err)
+                error.innerHTML = "Bạn đã nhập sai tên hoặc mật khẩu"
+            })
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function handleKeyPress(event) {
+        if (event.keyCode === 13) {
+            // 13 là mã phím Enter
+            login(); // Gọi hàm đăng nhập khi nhấn Enter
+        }
+    }
+    document.getElementById('name').addEventListener('keypress', handleKeyPress);
+    document.getElementById('password').addEventListener('keypress', handleKeyPress);
+</script>

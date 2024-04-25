@@ -1,0 +1,88 @@
+<div id="spinner"
+    class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner"></div>
+</div>
+<main class="color-background">
+    <div class="container">
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                        <div class="d-flex justify-content-center py-4">
+                            <a href="/" class="logo d-flex align-items-center w-auto">
+                                <img src="assets/img/logo.png" alt="">
+                                <span class="d-none d-lg-block">Công ty DGB</span>
+                            </a>
+                        </div><!-- End Logo -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="pt-4 pb-2">
+                                    <h5 class="card-title text-center pb-0 fs-4">Đặt lại mật khẩu</h5>
+                                    <p class="text-center small">Nhập mật khẩu mới của bạn</p>
+                                </div>
+                                <form action="/user/reset" method="POST" class="form row" id="form-1">
+                                    <div class="form-group  mt-3">
+                                        <label for="password" class="form-label">Password :</label>
+                                        <input type="password" class="form-control" id="password" placeholder=""
+                                            name="password">
+                                        <span class="form-message" id=""></span>
+                                    </div>
+                                    <div class="form-group  mt-3">
+                                        <label for="password" class="form-label"> Confirmation Password :</label>
+                                        <input type="password" class="form-control" id="confirmation" placeholder=""
+                                            name="confirmation">
+                                        <span class="form-message" id=""></span>
+                                    </div>
+                                    <div class="box-center mt-4">
+                                        <button class="btn btn-primary w-50 " type="submit" id="button">Xác nhận
+                                        </button>
+                                    </div>
+                                    <input type="hidden" id="email" name="email" value="{{email}}">
+                                    <input type="hidden" id="token" name="token" value="{{token}}">
+                                </form>
+                                <div class="col-12 box-center mt-3">
+                                    <div id="message"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+</body>
+<script src="/js/validate.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script>
+    var fromsubmit = document.forms['form-1']
+    var message = document.getElementById('message')
+    Validator({
+        form: '#form-1',
+        selectform: '.form-group',
+        error: ".form-message",
+        rules: [
+            Validator.isPassWord('#password', 8),
+            Validator.isConfirmation('#confirmation', function () {
+                return document.getElementById('password').value
+            })
+        ],
+        onSubmit: function (data) {
+            $.ajax({
+                url: '/user/reset',
+                type: 'POST',
+                data: {
+                    token: $('#token').val(),
+                    //mã hóa mật khẩu trước khi gửi qua ajax
+                    password: CryptoJS.SHA256($('#password').val()).toString(),
+                    email: $('#email').val(),
+                }
+            }).then((data) => {
+                message.innerHTML = data.message
+            })
+                .catch(err => { console.log(err) })
+        }
+    });
+</script>
