@@ -6,7 +6,7 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Ty Chứng Nhận Chất Lượng DGB</title>
+    <title>Công ty TNHH Tiêu chuẩn và Chứng nhận DGB</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="/css/style.css">
 
     <link rel="stylesheet" href="/css/styleAdmin.css">
-     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/app.css">
 
 </head>
 
@@ -46,10 +46,20 @@
 <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="/js/main.js"></script>
 
-
-
-
 <script src="/js/mainAdmin.js"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        $("#sidebar-nav").each(function () {
+            var t = window.location.pathname
+
+            $(this).find('a[href="' + t + '"]').removeClass("collapsed")
+            if ($('#icons-nav a[href="' + t + '"]').length) {
+                $('a[data-bs-target="#icons-nav"]').removeClass('collapsed');
+                $("#icons-nav").removeClass("collapse");
+            }
+        })
+    })
+</script>
 
 </html>

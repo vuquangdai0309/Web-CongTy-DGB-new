@@ -1,54 +1,109 @@
-const connection = require('../../config/db/index')
+const { el } = require("date-fns/locale");
+const connection = require("../../config/db/index");
 const TraCuuModel = {
-    getAllTraCuus: (callback) => {
-        const query = 'SELECT * FROM tracuu ';
-        connection.query(query, callback);
-    },
-    getTraCuuById: (TraCuuId, callback) => {
-        const query = 'SELECT * FROM tracuu WHERE _id = ?';
-        connection.query(query, [TraCuuId], callback);
-    },
+  getAllStatus: () => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT *FROM status WHERE is_deleted = 0`;
+      connection.query(query, (err, results) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(results);
+      });
+    });
+  },
 
-    addTraCuu: (TraCuu, callback) => {
-        const query = 'INSERT INTO tracuu (filepdf, madangky,congty,diachi,sdt,nguoidaidien,ngaybatdau,ngayketthuc,trangthai) VALUES (?,?,?,?,?,?,?,?,?)';
-        const values = [TraCuu.filepdf, TraCuu.madangky, TraCuu.congty, TraCuu.diachi, TraCuu.sdt, TraCuu.nguoidaidien, TraCuu.ngaybatdau, TraCuu.ngayketthuc, TraCuu.trangthai];
-        connection.query(query, values, callback);
-    },
-    updateTraCuu: (TraCuuId, TraCuu, callback) => {
-        const query = 'UPDATE tracuu SET filepdf=?, madangky=?,congty=?,diachi=?,sdt=?,nguoidaidien=?,ngaybatdau=?,ngayketthuc=?,trangthai=?,ngaygiahan=?  WHERE _id = ?';
-        const values = [TraCuu.filepdf, TraCuu.madangky, TraCuu.congty, TraCuu.diachi, TraCuu.sdt, TraCuu.nguoidaidien, TraCuu.ngaybatdau, TraCuu.ngayketthuc, TraCuu.trangthai, TraCuu.ngaygiahan, TraCuuId];
-        connection.query(query, values, callback);
-    },
-    forceDestroyTraCuu: (TraCuuId, callback) => {
-        const query = 'DELETE FROM tracuu WHERE _id = ?';
-        connection.query(query, [TraCuuId], callback);
-    },
-    //tìm kiếm giấy chứng nhận
-    searchTraCuu: (madangky, ngaybatdau, ngayketthuc) => {
-        return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM tracuu WHERE madangky = ? AND ngaybatdau = ? AND ngayketthuc = ? ';
-            connection.query(query, [madangky, ngaybatdau, ngayketthuc], (err, results) => {
-                if (err) {
-                    reject(error);
-                }
-                resolve(results[0]);
-            })
-        })
-    },
+  getAllTraCuus: (search) => {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT tracuu.*,
+      status.nameStatus AS nameStatus
+      FROM tracuu
+      JOIN status ON tracuu.statusId = status._id
+      WHERE tracuu.is_deleted = 0 AND tracuu.company LIKE ?`;
+      const values = "%" + search + "%";
+      connection.query(query, values, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  getTraCuuById: (TraCuuId) => {
+    return new Promise((resolve, reject) => {
+      const query = "SELECT * FROM tracuu WHERE _id = ? AND is_deleted = 0";
+      connection.query(query, [TraCuuId], (err, results) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(results);
+      });
+    });
+  },
 
-    // đếm số lượng các chứng nhận
-    countTraCuu: (callback) => {
-        const query = `SELECT COUNT(*) AS giaychungnhanCount FROM tracuu`;
-        connection.query(query, (error, results, fields) => {
-            if (error) {
-                return callback(error, null);
-            }
+  addTraCuu: (TraCuu, callback) => {
+    const query =
+      "INSERT INTO tracuu (filepdf, code,company,address,phone,customer,dateStart,dateEnd) VALUES (?,?,?,?,?,?,?,?)";
+    const values = [
+      TraCuu.filepdf,
+      TraCuu.code,
+      TraCuu.company,
+      TraCuu.address,
+      TraCuu.phone,
+      TraCuu.customer,
+      TraCuu.dateStart,
+      TraCuu.dateEnd,
+    ];
+    connection.query(query, values, callback);
+  },
+  updateTraCuu: (TraCuuId, TraCuu, callback) => {
+    const query =
+      "UPDATE tracuu SET filepdf=?, code=?,company=?,address=?,phone=?,customer=?,dateStart=?,dateEnd=?,statusId=?,dateExtend=?  WHERE _id = ?";
+    const values = [
+      TraCuu.filepdf,
+      TraCuu.code,
+      TraCuu.company,
+      TraCuu.address,
+      TraCuu.phone,
+      TraCuu.customer,
+      TraCuu.dateStart,
+      TraCuu.dateEnd,
+      TraCuu.statusId,
+      TraCuu.dateExtend,
+      TraCuuId,
+    ];
+    connection.query(query, values, callback);
+  },
+  forceDestroyTraCuu: (TraCuuId, callback) => {
+    const query = "DELETE FROM tracuu WHERE _id = ?";
+    connection.query(query, [TraCuuId], callback);
+  },
+  //tìm kiếm giấy chứng nhận
+  searchTraCuu: (code) => {
+    return new Promise((resolve, reject) => {
+      const query = "SELECT * FROM tracuu WHERE code = ? AND is_deleted = 0 ";
+      connection.query(query, [code], (err, results) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(results);
+      });
+    });
+  },
 
-            const giaychungnhanCount = results[0].giaychungnhanCount;
-            callback(null, giaychungnhanCount);
-        });
-    }
+  // đếm số lượng các chứng nhận
+  countTraCuu: (callback) => {
+    const query = `SELECT COUNT(*) AS giaychungnhanCount FROM tracuu`;
+    connection.query(query, (error, results, fields) => {
+      if (error) {
+        return callback(error, null);
+      }
 
+      const giaychungnhanCount = results[0].giaychungnhanCount;
+      callback(null, giaychungnhanCount);
+    });
+  },
 };
 
 // Export model để sử dụng ở nơi khác trong ứng dụng

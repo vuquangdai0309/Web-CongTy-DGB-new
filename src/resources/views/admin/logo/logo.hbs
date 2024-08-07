@@ -1,0 +1,270 @@
+<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+{{> headerAdmin}}
+{{> sidebar}}
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="pagetitle">
+                    <br>
+                    <h1>Logo đơn vị hợp tác</h1><br>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        data-bs-whatever="@mdo">Thêm Mới</button>
+                </div>
+                <section class="section dashboard mt-5 d-flex justify-content-center align-items-center">
+                    <table class="table table-bordered ">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Tên công ty</th>
+                                <th scope="col">Logo</th>
+                                <th colspan="2">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each logos}}
+                            <tr>
+                                <th scope="row">{{sum @index 1}}</th>
+                                <td>{{this.company}}</td>
+                                <td><img src="/{{this.nameLogo}}" style="width:100px;height:50px; ">
+                                </td>
+                                <td> <i class="far fa-edit size-icon-edit" style="font-size: 18px;"
+                                        data-bs-toggle="modal" data-bs-target="#edit-work-modal{{this._id}}"
+                                        onclick="getId({{this._id}})">
+                                    </i>
+                                </td>
+                                <td> <i class="far fa-trash-alt size-icon-delete" data-bs-toggle="modal"
+                                        data-bs-target="#delete-work-modal" data-id="{{this._id}}"
+                                        style="font-size: 18px;"></i>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="edit-work-modal{{this._id}}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog ">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa đơn vị hợp tác
+                                            </h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/logo/{{this._id}}/edit" method="POST"
+                                                enctype="multipart/form-data">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group ">
+                                                            <label for="recipient-name" class="col-form-label">Tên
+                                                                công ty<span style="color: red;">*</span></label>
+                                                            <input type="text" class="form-control" name="company"
+                                                                value="{{this.company}}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="file" id="image{{this._id}}" style="display: none;"
+                                                            name="nameLogo" accept="image/*">
+                                                        <input type="text" class="form-control" name="getLogo"
+                                                            value="{{this.nameLogo}}" hidden>
+                                                        <!-- Ảnh sẽ được hiển thị và click vào đây sẽ mở trình duyệt file dialog -->
+                                                        <div class="row d-flex text-center">
+                                                            <div class="col-12">
+                                                                <img id="imagePreview{{this._id}}"
+                                                                    src="/{{this.nameLogo}}" alt="Preview"
+                                                                    style="max-width:200px;max-height:200px;object-fit: cover;">
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <label class="form-check-label" for="mySwitch">Chọn
+                                                                    logo <span style="color: red;">*</span></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-bs-dismiss="modal">Thoát</button>
+                                                    <button class="btn btn-primary" type="submit">Chỉnh sửa</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{else}}
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    Dữ liệu chưa được thêm vào!
+                                </td>
+                            </tr>
+
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </section>
+                <div class="col-lg-12 center">
+                    <div class="">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                {{#if pagination.prev}}
+                                <li class="page-item">
+                                    <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                                {{#each pagination.pages as |page|}}
+                                {{#if page.active}}
+                                <li class="page-item active">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                </li>
+                                {{else if page.isDots }}
+
+                                {{else}}
+                                <li class="page-item ">
+                                    <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                </li>
+                                {{/if}}
+                                {{/each}}
+
+                                {{#if pagination.next}}
+                                <li class="page-item">
+                                    <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{{> footerAdmin}}
+
+{{!-- modal thêm --}}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Logo</h5>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/logo/create" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="recipient-name" class="col-form-label">Tên công ty<span
+                                        style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="company" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="file" id="image" style="display: none;" name="nameLogo" accept="image/*"
+                                required>
+                            <!-- Ảnh sẽ được hiển thị và click vào đây sẽ mở trình duyệt file dialog -->
+                            <div class="row d-flex text-center">
+                                <div class="col-12">
+                                    <img id="imagePreview" src="/img/image1.avif" alt="Preview"
+                                        style="max-width:200px;max-height:200px;object-fit: cover;">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-check-label" for="mySwitch">Chọn logo <span
+                                            style="color: red;">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Thoát</button>
+                        <button class="btn btn-primary" type="submit">Thêm mới</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- modal xóa --}}
+<div id="delete-work-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa Logo </h5>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn logo viết này không ?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-delete" type="button" class="btn btn-danger">Đồng ý xóa</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{!-- form delete --}}
+<form name="delete-form" method="POST"></form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function changePage(page) {
+        window.location.href = `/admin/logo?page=${page}`;
+    } 
+    function getId(id) {
+        var img = document.getElementById(`image${id}`)
+        var imagePreview = document.getElementById(`imagePreview${id}`)
+        // Khi click vào ảnh, chuyển sự kiện click đến trường nhập file
+        imagePreview.addEventListener('click', function () {
+            img.click();
+           
+        });
+        // change ảnh khi chọn
+        img.addEventListener('change', function () {
+            if (img.files && img.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(img.files[0]);
+            }
+        });
+    }
+
+    var img = document.getElementById('image')
+    var imagePreview = document.getElementById('imagePreview')
+    // Khi click vào ảnh, chuyển sự kiện click đến trường nhập file
+    imagePreview.addEventListener('click', function () {
+        img.click();
+      
+    });
+    // change ảnh khi chọn
+    img.addEventListener('change', function () {
+        if (img.files && img.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(img.files[0]);
+        }
+    });
+
+    // delete 
+    const exampleModal = document.getElementById('delete-work-modal')
+    exampleModal.addEventListener('show.bs.modal', event => {
+        var deleteForm = document.forms['delete-form']
+        var btnDeleteCalendar = document.getElementById('btn-delete')
+        const button = event.relatedTarget
+        //get id from button delete
+        const recipient = button.getAttribute('data-id')
+
+        btnDeleteCalendar.onclick = function () {
+            deleteForm.action = '/admin/logo/' + recipient + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+
+
+</script>

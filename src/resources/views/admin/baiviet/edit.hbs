@@ -2,95 +2,123 @@
 {{> sidebar}}
 <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
 <main id="main" class="main">
-    <div class="pagetitle">
-        <h1>Chỉnh sửa dịch vụ</h1>
-    </div><!-- End Page Title -->
     <section class="section dashboard">
-        <div class="row">
-            <div class="col-lg-12">
-                <!-- Recent Activity -->
-                <div class="card">
-                    {{#each baiviet}}
-                    <div class="card-body">
 
-                        <h5 class="card-title" id="currentYear"> </h5>
-
-                        <div class="add-event-form">
-                            <input type="hidden" id="content" value="{{this.content}}">
-                            <br>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Tiêu đề:</label><br>
-                                        <input type="text" class="form-control" value="{{this.title}}" id="title"
-                                            name="title">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="recipient-name" class="col-form-label">Chọn thể loại:</label><br>
-                                        <select class="form-select" id="category" show-value="{{this.category}}"
-                                            aria-label="Default select example">
-                                            <option value="Giới thiệu">Giới thiệu</option>
-                                            <option value="Dịch vụ">Dịch vụ</option>
-                                            <option value="Tin tức">Tin tức</option>
-                                        </select>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="recipient-name" class="col-form-label">Hiển thị tên ra
-                                                    menu:</label><br>
-                                                <select class="form-select" id="showmenu" show-value="{{this.showmenu}}"
-                                                    aria-label="Default select example">
-                                                    <option value="khong">Không hiển thị</option>
-                                                    <option value="co">Có hiển thị</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="form-group">
-                                                <label for="recipient-name" class="col-form-label">Hiển thị
-                                                    logo:</label><br>
-                                                <select class="form-select" id="showlogo" show-value="{{this.showlogo}}"
-                                                    aria-label="Default select example">
-                                                    <option value="khong">Không hiển thị</option>
-                                                    <option value="co">Có hiển thị</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group ">
-                                        <label for="recipient-name" class="col-form-label">Ngày tạo:</label><br>
-                                        <input type="date" class="form-control" id="createdAt" name="createdAt"
-                                            value="{{{formatDate this.createdAt}}}">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <!-- Trường nhập file ẩn -->
-                                    <input type="file" id="image" style="display: none;" name="image" accept="image/*">
-                                    <label for="fileInput">Hình ảnh:</label><br>
-                                    <!-- Ảnh sẽ được hiển thị và click vào đây sẽ mở trình duyệt file dialog -->
-                                    <img id="imagePreview" src="/{{this.image}}" UrlImage="{{this.image}}"
-                                        alt="Preview">
-                                    <br><br><br>
-
+        <div class="card">
+            {{#each baiviet}}
+            <div class="card-body" style="margin-top:40px;">
+                <a href="/admin/bai-viet"> <i class="bi bi-arrow-left-circle-fill" style="font-size: 18px;"></i></a>
+                <h3>Chỉnh sửa bài viết</h3>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <label for="recipient-name" class="col-form-label">Tiêu đề<span
+                                            style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="title" name="title"
+                                        value="{{this.title}}">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="message-text" class="col-form-label">Nội dung:</label>
-                                <div id="editor" style="min-height: 400px;"></div>
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <label for="recipient-name" class="col-form-label">Ngày tạo<span
+                                            style="color: red;">*</span></label><br>
+                                    <input type="date" class="form-control" id="createdAt" name="createdAt"
+                                        value="{{{formatDate this.createdAt}}}">
+                                </div>
                             </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary" onclick="onclickEdit()">Lưu Lại</button>
-
                         </div>
-                        <div id="getcontent" style="display: none;" getid="{{this._id}}"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <label for="recipient-name" class="col-form-label">Chọn thể loại<span
+                                            style="color: red;">*</span></label><br>
+                                    <select class="form-select" id="category">
+                                        {{#each ../categories}}
+                                        <option value="{{this._id}}" {{#ifCond this._id ../this.categoryId }} selected
+                                            {{/ifCond}}>
+                                            {{this.nameCategory}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span style="color:red;font-size: 12px;   font-style: italic;">Đối với thể loại
+                                    là
+                                    dịch
+                                    vụ</span>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="form-check-label" for="mySwitch">Hiển thị lên menu
+                                            </label>
+                                            <div class="form-check form-switch">
+                                                {{#ifCond this.isMenu 1}}
+                                                <input class="form-check-input" type="checkbox" id="showmenu"
+                                                    name="darkmode" checked>
+                                                {{else}}
+                                                <input class="form-check-input" type="checkbox" id="showmenu"
+                                                    name="darkmode">
+                                                {{/ifCond}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="form-check-label" for="mySwitch">Hiển thị danh sách
+                                            </label>
+                                            <div class="form-check form-switch">
+                                                {{#ifCond this.isLogo 1}}
+                                                <input class="form-check-input" type="checkbox" id="showlogo"
+                                                    name="darkmode" checked>
+                                                {{else}}
+                                                <input class="form-check-input" type="checkbox" id="showlogo"
+                                                    name="darkmode">
+                                                {{/ifCond}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    {{/each}}
-                </div><!-- End Recent Activity -->
-                <!-- Budget Report -->
-            </div><!-- End Right side columns -->
+                    <div class="col-md-4"> <!-- Trường nhập file ẩn -->
+                        <input type="file" id="image" style="display: none;" name="image" accept="image/*">
+                        <!-- Ảnh sẽ được hiển thị và click vào đây sẽ mở trình duyệt file dialog -->
+                        <div class="row d-flex text-center">
+                            <div class="col-12">
+                                <img id="imagePreview" src="/{{this.image}}" UrlImage="{{this.image}}" alt="Preview"
+                                    style="max-width:200px;max-height:200px;object-fit: cover;">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-check-label" for="mySwitch">Chọn hình ảnh <span
+                                        style="color: red;">*</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add-event-form">
+                    <input type="hidden" id="content" value="{{this.content}}">
+                    <br>
+
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Nội dung:</label>
+                        <div id="editor" style="min-height: 600px;"></div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" onclick="onclickEdit()" style="float: right;">Lưu
+                        Lại</button>
+
+                </div>
+                <div id="getcontent" style="display: none;" getid="{{this._id}}"></div>
+            </div>
+            {{/each}}
         </div>
+
     </section>
 </main><!-- End #main -->
 
@@ -104,6 +132,7 @@
     var imagePreview = document.getElementById('imagePreview')
     //get url image
     var UrlImage = imagePreview.getAttribute('UrlImage')
+
     //lấy nội dung
     const getcontent = document.getElementById('getcontent')
     const content = document.getElementById('content').value
@@ -129,85 +158,39 @@
             reader.readAsDataURL(img.files[0]);
         }
     });
-    var showmenu = document.getElementById('showmenu')
-    var getAttrMenu = showmenu.getAttribute('show-value')
-
-    var showlogo = document.getElementById('showlogo')
-    var getAttrLogo = showlogo.getAttribute('show-value')
-
-    var showcategory = document.getElementById('category')
-    var getAttrCategory = showcategory.getAttribute('show-value')
-    function showSelected(showElement, value) {
-        valueFromDatabase = value
-        // Lấy tham chiếu đến element select
-        var selectElement = showElement
-
-        // Duyệt qua từng option trong select
-        for (var i = 0; i < selectElement.options.length; i++) {
-            // So sánh giá trị của option với giá trị từ database
-            if (selectElement.options[i].value === valueFromDatabase) {
-                // Đặt thuộc tính selected cho option tương ứng
-                selectElement.options[i].selected = true;
-                break; // Dừng vòng lặp nếu đã tìm thấy giá trị
-            }
-        }
-    }
-    showSelected(showmenu, getAttrMenu)
-    showSelected(showlogo, getAttrLogo)
-    showSelected(showcategory, getAttrCategory)
-
     //click edit
     function onclickEdit() {
         var tinymceHtmlContent = tinymce.get('editor').getContent()
         var title = document.getElementById('title').value
         var category = document.getElementById('category').value
-        var showlogo = document.getElementById('showlogo').value
-        var showmenu = document.getElementById('showmenu').value
+        var showlogo = document.getElementById('showlogo').checked
+        var showmenu = document.getElementById('showmenu').checked
         var createdAt = document.getElementById('createdAt').value
-        console.log(createdAt)
+
         const file = img.files[0]
         //if you selected file
-        if (img.files.length > 0) {
-            if (file && title && category && createdAt) {
-                const formData = new FormData();
-                formData.append('image', file);
-                formData.append('id', getid);
-                formData.append('title', title);
-                formData.append('category', category);
-                formData.append('editor', tinymceHtmlContent);
-                formData.append('showlogo', showlogo);
-                formData.append('showmenu', showmenu);
-                formData.append('createdAt', createdAt);
-                fetch(`/admin/bai-viet/${getid}`, {
-                    method: 'PUT',
-                    body: formData,
-                })
-                    .then(() => {
-                        window.history.back();
 
-                    })
-            }
-        }
-        //if you don't select file --> get url image
-        else {
-            if (title && category && createdAt) {
-                const formData = new FormData();
-                formData.append('image', UrlImage);
-                formData.append('id', getid);
-                formData.append('title', title);
-                formData.append('category', category);
-                formData.append('editor', tinymceHtmlContent);
-                formData.append('showlogo', showlogo);
-                formData.append('showmenu', showmenu);
-                formData.append('createdAt', createdAt);
-                fetch(`/admin/bai-viet/${getid}`, {
-                    method: 'PUT',
-                    body: formData,
+        if (title && category && createdAt) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('id', getid);
+            formData.append('title', title);
+            formData.append('category', category);
+            formData.append('editor', tinymceHtmlContent);
+            formData.append('showlogo', showlogo);
+            formData.append('showmenu', showmenu);
+            formData.append('createdAt', createdAt);
+            formData.append('UrlImage', UrlImage);
+            fetch(`/admin/bai-viet/${getid}`, {
+                method: 'PUT',
+                body: formData,
+            })
+                .then(() => {
+                    window.location.replace('/admin/bai-viet')
+
                 })
-                    .then(() => {
-                        window.location.replace('/admin/bai-viet')
-                    })
-            }
         }
+
+
     }
 </script>

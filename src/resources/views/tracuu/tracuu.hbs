@@ -5,7 +5,7 @@
             <h1 class="display-4 text-white animated zoomIn">Tra cứu giấy chứng nhận</h1>
             <a href="/" class="h5 text-white">Trang chủ</a>
             <i class="far fa-circle text-white px-2"></i>
-            <a  class="h5 text-white">Tra cứu giẩy chứng nhận</a>
+            <a class="h5 text-white">Tra cứu giẩy chứng nhận</a>
         </div>
     </div>
 </div>
@@ -13,46 +13,40 @@
     <div class="container">
 
         <div class="section-main ">
-            <form action="/tra-cuu-giay-chung-nhan/search" method="POST">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="recipient-name" class="col-form-label"><strong>Nhập mã Chứng
-                                Nhận</strong></label>
-                        <input type="text" name="madangky" class="form-control" id="madangky"
-                            placeholder="Nhập mã tra cứu ...">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="recipient-name" class="col-form-label"><strong>Ngày bắt đầu:</strong></label>
-                        <input type="date" class="form-control" id="ngaybatdau" name="ngaybatdau">
-                    </div>
-                    <div class="col-md-4">
-                        <label for="recipient-name" class="col-form-label"><strong>Ngày kết thúc</strong></label>
-                        <input type="date" class="form-control" id="ngayketthuc" name="ngayketthuc">
+            <form action="/tra-cuu-giay-chung-nhan" method="GET">
+                <div class="row d-flex justify-content-center text-center">
+                    <div class="col-md-6">
+                        <h3 class="mt-4 mb-3">Nhập mã giấy chứng nhận</h3>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Code..." name="code"
+                                aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Tra cứu</button>
+                        </div>
                     </div>
                 </div>
                 <br>
-                <div class=" d-flex justify-content-center align-items-center"><button type="submit"
-                        class="btn btn-primary center">Tìm Kiếm</button></div>
-
             </form>
         </div>
     </div>
 </div>
-<div class="recent-product" style="background-color: rgb(255, 255, 255)">
+<div class="recent-product">
     <div class="container">
         {{#if tracuu}}
-        <div class="row " style="background-color: rgb(250, 255, 249);">
-            <div class="col-md-6" style="padding-top: 5%;">
-                <p><strong>Công ty: </strong>{{tracuu.congty}}</p><br>
-                <p><strong>Địa chỉ:</strong> {{tracuu.diachi}}</p><br>
-                <p><strong>Số điện thoại:</strong> {{tracuu.sdt}}</p><br>
-                <p><strong>Người đại diện:</strong> {{tracuu.nguoidaidien}}</p><br>
-                <p><strong>Trạng thái:</strong> {{tracuu.trangthai}}</p><br>
+        <section class="section dashboard">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="mt-4 mb-3 center">Kết quả tra cứu</h3>
+                    <embed src="/{{tracuu.filepdf}}" width="100%" height="600px" />
+                    {{!-- <div class="col-md-3">
+                        <p><strong>Công ty: </strong>{{tracuu.company}}</p>
+                        <p><strong>Địa chỉ:</strong> {{tracuu.address}}</p>
+                        <p><strong>Số điện thoại:</strong> {{tracuu.phone}}</p>
+                        <p><strong>Người đại diện:</strong> {{tracuu.customer}}</p>
+                        <p><strong>Trạng thái:</strong> {{tracuu.status}}</p>
+                    </div> --}}
+                </div>
             </div>
-            <div class="col-md-6 center">
-                <embed src="/{{tracuu.filepdf}}" width="400px" height="500px" />
-            </div>
-        </div>
+        </section>
         {{/if}}
         {{#unless tracuu}}
         <div class="row ">
@@ -60,7 +54,8 @@
                 <br>
                 <br>
                 <h4><strong>Không tìm thấy!</strong></h4>
-                <p>Chúng tôi không tìm thấy chứng chỉ phù hợp với yêu cầu của bạn. Vui lòng nhập từ khóa khác.</p>
+                <p>Chúng tôi không tìm thấy chứng chỉ phù hợp với yêu cầu của bạn. Vui lòng nhập
+                    từ khóa khác.</p>
             </div>
             <div class="col-6 center"><img src="/img/not-found.png" style="max-height: 200px;float:right"></div>
         </div>
@@ -68,6 +63,6 @@
 
     </div>
 </div>
-</div>
+
 
 {{> footer}}

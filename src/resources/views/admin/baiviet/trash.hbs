@@ -1,108 +1,124 @@
 {{> headerAdmin}}
 {{> sidebar}}
-<form name="container-form" method="POST" action="/admin/bai-viet/handle-form-actions-trash">
-    <main id="main" class="main">
-        <div class="pagetitle">
-            <h1>Thùng rác</h1><br>
-            <span><a href="/admin/bai-viet"><i class="bi bi-arrow-left-circle-fill size-icon-edit"></i></a></span>
-        </div><!-- End Page Title -->
-        <div class="select-all d-flex mt-4 ">
-            <div class="checkbox">
-                <label><input type="checkbox" value="" id="checkbox-all"> Chọn tất cả</label>
-            </div>
-            <div class="form-group w-25 mx-5">
-                <select class="form-control " style="text-align: center;" name="action" required>
-                    <option value="">---Hành động---</option>
-                    <option value="restore">--Khôi phục--</option>
-                    <option value="delete">--Xóa vĩnh viễn--</option>
-                </select>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary mr-5 btn-check-all-submit " disabled>Thực hiện</button>
-            </div>
+<main id="main" class="main">
+    <section class="section dashboard">
+        <div class="card">
+            <div class="card-body">
+                <form name="container-form" method="POST" action="/admin/bai-viet/handle-form-actions-trash">
+                    <div class="pagetitle">
 
+                        <span><a href="/admin/bai-viet"><i
+                                    class="bi bi-arrow-left-circle-fill size-icon-edit"></i></a></span>
+                        <br>
+                        <h1>Thùng rác</h1>
+                    </div><!-- End Page Title -->
+                    <div class="select-all d-flex mt-4 ">
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="" id="checkbox-all"> Chọn tất cả</label>
+                        </div>
+                        <div class="form-group w-25 mx-5">
+                            <select class="form-control " style="text-align: center;" name="action" required>
+                                <option value="">---Hành động---</option>
+                                <option value="restore">--Khôi phục--</option>
+                                <option value="delete">--Xóa vĩnh viễn--</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary mr-5 btn-check-all-submit " disabled>Thực
+                                hiện</button>
+                        </div>
+
+                    </div>
+                    <section class="section dashboard mt-5">
+                        <table class="table table-bordered " style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">STT</th>
+                                    <th scope="col">Tiêu đề</th>
+                                    <th scope="col">Thể loại</th>
+                                    <th scope="col">Hình ảnh</th>
+
+                                    <th colspan="2">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each baiviet}}
+                                <tr>
+                                    <th>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="baivietIds"
+                                                    value="{{this._id}}"></label>
+                                        </div>
+                                    </th>
+                                    <th scope="row">{{sum @index 1}}</th>
+                                    <td>{{this.title}}</td>
+                                    <td>{{this.nameCategory}}</td>
+                                    <td><img src="/{{this.image}}" style="width:50px;height:50px;border-radius: 50%; ">
+                                    </td>
+
+                                    <td> <a href="" class="btn-restore size-icon-edit" data-id="{{this._id}}"><i
+                                                class="fas fa-sync-alt" style="font-size: 14px;"></i></a></td>
+                                    <td> <a> <i class="far fa-trash-alt size-icon-delete" data-bs-toggle="modal"
+                                                data-bs-target="#delete-work-modal" data-id="{{this._id}}"
+                                                style="font-size: 14px;"></i></a>
+                                    </td>
+                                </tr>
+                                {{else}}
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        Không có bản ghi nào được xóa
+                                    </td>
+                                </tr>
+                                {{/each}}
+
+                            </tbody>
+                        </table>
+                    </section>
+                    <div class="col-lg-12 center">
+                        <div class="">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {{#if pagination.prev}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.prev}})"
+                                            aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                    {{#each pagination.pages as |page|}}
+                                    {{#if page.active}}
+                                    <li class="page-item active">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{else if page.isDots }}
+
+                                    {{else}}
+                                    <li class="page-item ">
+                                        <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
+                                    </li>
+                                    {{/if}}
+                                    {{/each}}
+
+                                    {{#if pagination.next}}
+                                    <li class="page-item">
+                                        <a class="page-link" onclick="changePage({{pagination.next}})"
+                                            aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    {{/if}}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
-        <section class="section dashboard mt-5">
-            <table class="table table-bordered " style="text-align: center;">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">STT</th>
-                        <th scope="col">Tiêu đề</th>
-                        <th scope="col">Thể loại</th>
-                        <th scope="col">Hình ảnh</th>
-
-                        <th colspan="2">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each baiviet}}
-                    <tr>
-                        <th>
-                            <div class="checkbox">
-                                <label><input type="checkbox" name="baivietIds" value="{{this._id}}"></label>
-                            </div>
-                        </th>
-                        <th scope="row">{{sum @index 1}}</th>
-                        <td>{{this.title}}</td>
-                        <td>{{this.category}}</td>
-                        <td><img src="/{{this.image}}" style="width:150px"></td>
-
-                        <td> <a href="" class="btn-restore size-icon-edit" data-id="{{this._id}}"><i
-                                    class="fas fa-sync-alt"></i></a></td>
-                        <td> <a> <i class="far fa-trash-alt size-icon-delete" data-bs-toggle="modal"
-                                    data-bs-target="#delete-work-modal" data-id="{{this._id}}"></i></a>
-                        </td>
-                    </tr>
-                    {{else}}
-                    <tr>
-                        <td colspan="9" class="text-center">
-                            Không có bản ghi nào được xóa
-                        </td>
-                    </tr>
-                    {{/each}}
-
-                </tbody>
-            </table>
-        </section>
-        <div class="col-lg-12 center">
-            <div class="">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {{#if pagination.prev}}
-                        <li class="page-item">
-                            <a class="page-link" onclick="changePage({{pagination.prev}})" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        {{/if}}
-                        {{#each pagination.pages as |page|}}
-                        {{#if page.active}}
-                        <li class="page-item active">
-                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                        </li>
-                        {{else if page.isDots }}
-
-                        {{else}}
-                        <li class="page-item ">
-                            <a class="page-link" onclick="changePage({{this.number}})">{{this.number}}</a>
-                        </li>
-                        {{/if}}
-                        {{/each}}
-
-                        {{#if pagination.next}}
-                        <li class="page-item">
-                            <a class="page-link" onclick="changePage({{pagination.next}})" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        {{/if}}
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </main>
-</form>
+    </section>
+</main>
 <div id="delete-work-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
